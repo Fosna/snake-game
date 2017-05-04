@@ -52,11 +52,21 @@ document.ready().then(function () {
     }
 
     function moveTheSnake(snakeArray) {
+        const head = snakeArray[snakeArray.length - 1];
+        const newHead = { x: head.x + 1, y: head.y };
+
+        // Add new head cell.
+        snakeArray.push(newHead);
+        // Remove last tail cell.
+        snakeArray.shift(0);
+
         return snakeArray;
     }
 
     // Triggered on every game loop round.
     function tick(snakeArray, ctx, w, h) {
+        console.log(snakeArray);
+        
         snakeArray = moveTheSnake(snakeArray);
         
         paintEmptyGameCanvas(ctx, w, h);
