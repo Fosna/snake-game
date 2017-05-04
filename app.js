@@ -8,11 +8,13 @@ document.ready().then(function () {
         const w = 450;
         const h = 450;
 
-        paintEmptyGameCanvas(ctx, w, h);
-
         const snakeArray = createSnake();
-        
-        paintTheSnake(snakeArray, ctx);
+
+        const snakeSpeed = Math.round(1000 / 3); // 3 cells per second.
+        setInterval(
+            () => tick(snakeArray, ctx, w, h), 
+            snakeSpeed
+        );
     }
 
     function paintEmptyGameCanvas(ctx, w, h) {
@@ -29,7 +31,6 @@ document.ready().then(function () {
 
         for(let i = 0; i < snakeArray.length; i++) {
             const cell = snakeArray[i];
-            console.log(cell);
 
             // Paint cell
             ctx.fillStyle = "blue";
@@ -50,4 +51,15 @@ document.ready().then(function () {
         return snakeArray;
     }
 
+    function moveTheSnake(snakeArray) {
+        return snakeArray;
+    }
+
+    // Triggered on every game loop round.
+    function tick(snakeArray, ctx, w, h) {
+        snakeArray = moveTheSnake(snakeArray);
+        
+        paintEmptyGameCanvas(ctx, w, h);
+        paintTheSnake(snakeArray, ctx);
+    };
 });
