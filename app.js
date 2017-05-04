@@ -1,33 +1,53 @@
 document.ready().then(function () {
-    const canvas = document.getElementById("canvas");
-    const ctx = canvas.getContext("2d");
-    const w = 450;
-    const h = 450;
+    init();
 
-    // Paint empty canvas with border.
-    ctx.fillStyle = "white";
-    ctx.fillRect(0, 0, w, h);
-    ctx.strokeStyle = "black";
-    ctx.strokeRect(0, 0, w, h);
 
-    console.log("monkey");
+    function init() {
+        const canvas = document.getElementById("canvas");
+        const ctx = canvas.getContext("2d");
+        const w = 450;
+        const h = 450;
 
-    // Create snake model
-    // Array of snake cells.
-    const snake_array = [];
+        paintEmptyGameCanvas(ctx, w, h);
 
-    // Length of the snake
-    const length = 5;
-    for(let i = 0; i < length - 1; i++) {
-        snake_array.push({x: i, y: 0});
+        const snakeArray = createSnake();
+        
+        paintTheSnake(snakeArray, ctx);
+    }
+
+    function paintEmptyGameCanvas(ctx, w, h) {
+        // Paint empty canvas with border.
+        ctx.fillStyle = "white";
+        ctx.fillRect(0, 0, w, h);
+        ctx.strokeStyle = "black";
+        ctx.strokeRect(0, 0, w, h);
     }
 
     // Paint the snake
-    for(let i = 0; i < snake_array.length; i++) {
-        const cell = snake_array[i];
-        
-        // Paint cell
-        ctx.fillStyle = "blue";
-        ctx.fillRect(cell.x * 10, cell.y * 10, 9, 9);
+    function paintTheSnake(snakeArray, ctx) {
+        const cellWidth = 10;
+
+        for(let i = 0; i < snakeArray.length; i++) {
+            const cell = snakeArray[i];
+            console.log(cell);
+
+            // Paint cell
+            ctx.fillStyle = "blue";
+            ctx.fillRect(cell.x * cellWidth, cell.y * cellWidth, cellWidth - 1, cellWidth - 1);
+        }
     }
+
+    // Create snake model
+    function createSnake() {
+        // Array of snake cells.
+        const snakeArray = [];
+
+        const snakeLength = 5;
+        for(let i = 0; i < snakeLength; i++) {
+            snakeArray.push({x: i, y: 0});
+        }
+
+        return snakeArray;
+    }
+
 });
