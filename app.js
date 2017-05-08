@@ -1,6 +1,7 @@
 document.ready().then(() => {
     // Snake direction.
     let direction = "right";
+    let directionInput = direction;
     let gameState = "start";
     let tickRepeaterId = null;
     
@@ -15,37 +16,35 @@ document.ready().then(() => {
         const snakeArray = createTheSnake();
 
         const snakeSpeed = Math.round(1000 / 5); // 3 cells per second.
-        document.addEventListener("keydown", setDirection);
+        document.addEventListener("keydown", setDirectionInput);
 
-        tickRepeaterId = setInterval(
-            () => tick(snakeArray, ctx, w, h, gameState), 
-            snakeSpeed
-        );
+        // tickRepeaterId = setInterval(
+        //     () => tick(snakeArray, ctx, w, h, gameState), 
+        //     snakeSpeed
+        // );
         
         // DEBUG: Run tick on space keydown.
-        // document.addEventListener("keydown", 
-        //     (e) => {
-        //         // space
-        //         if (e.which === 32) {
-        //             tick(snakeArray, ctx, w, h, gameState);
-        //         }
-        //     }
-        // );
+        document.addEventListener("keydown", 
+            (e) => {
+                // space
+                if (e.which === 32) {
+                    tick(snakeArray, ctx, w, h, gameState);
+                }
+            }
+        );
     }
 
-    function setDirection(e) {
+    function setDirectionInput(e) {
         const key = e.which;
 
-        console.log(e.which);
-
-        if (key === 37 && direction !== "right") {
-            direction = "left";
-        } else if (key === 38 && direction !== "down") {
-            direction = "up";
-        } else if (key === 39 && direction !== "left") {
-            direction = "right";
-        } else if (key === 40 && direction !== "up") {
-            direction = "down";
+        if (key === 37) {
+            directionInput = "left";
+        } else if (key === 38) {
+            directionInput = "up";
+        } else if (key === 39) {
+            directionInput = "right";
+        } else if (key === 40) {
+            directionInput = "down";
         }
     }
 
@@ -83,11 +82,24 @@ document.ready().then(() => {
         return snakeArray;
     }
 
-    function moveTheSnake(snakeArray, direction) {
+    function moveTheSnake(snakeArray) {
         const head = snakeArray[snakeArray.length - 1];
         let x = head.x;
         let y = head.y;
 
+        
+        // Validate user input. Surpress reverse gear.
+        if (directionInput === "up" && direction !== "down") {
+            direction = "up";
+        } else if (directionInput === "right" && direction !== "left") {
+            direction = "right";
+        } else if (directionInput === "down" && direction !== "up") {
+            direction = "down";
+        } else if (directionInput === "left" && direction !== "right") {
+            direction = "left";
+        }
+        
+        // Calculate new head based on existing head.
         if (direction === "up") {
             y--;
         } else if (direction === "right") {
@@ -113,13 +125,12 @@ document.ready().then(() => {
         // Snake head touches walls.
         const head = snakeArray[snakeArray.length - 1];
 
-        isCrashDetected = head.x < 0 || w / 10 < head.x ||
-            head.y < 0 || h / 10 < head.y;
+        isCrashDetected = head.x < 0 || w / 10 <= head.x ||
+            head.y < 0 || h / 10 <= head.y;
 
 
         // Snake head touches snake body.
-        
-        // b < snakeArray.length - 1 := Whole snake but head.
+        //i < snakeArray.length - 1 means whole snake but head.
         for(let i = 0; i < snakeArray.length - 1 && isCrashDetected === false; i++) {
             let cell = snakeArray[i];
             isCrashDetected = head.x === cell.x && head.y === cell.y;
