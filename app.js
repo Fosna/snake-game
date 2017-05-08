@@ -17,7 +17,6 @@ document.ready().then(() => {
         const snakeSpeed = Math.round(1000 / 5); // 3 cells per second.
         document.addEventListener("keydown", setDirection);
 
-        console.log(gameState);
         tickRepeaterId = setInterval(
             () => tick(snakeArray, ctx, w, h, gameState), 
             snakeSpeed
@@ -107,15 +106,30 @@ document.ready().then(() => {
     }
 
     function isCrash(snakeArray, w, h) {
+
         // Snake head touches walls.
         const head = snakeArray[snakeArray.length - 1];
 
         isCrashDetected = head.x < 0 || w / 10 < head.x ||
             head.y < 0 || h / 10 < head.y;
-        console.log(isCrashDetected);
+
+
+        // Snake head touches snake body.
+        
+        // b < snakeArray.length - 1 := Whole snake but head.
+        for(let i = 0; i < snakeArray.length - 1 && isCrashDetected === false; i++) {
+            let cell = snakeArray[i];
+            isCrashDetected = head.x === cell.x && head.y === cell.y;
+        }
 
         return isCrashDetected;
-        // Snake head touches snake body.
+    }
+
+    function paintGameOver(ctx, w, h) {
+        ctx.font = "48px arial";
+        ctx.textAlign = "center"
+        ctx.fillStyle = "black";
+        ctx.fillText("Game Over", Math.round(w / 2), Math.round(h / 2));
     }
 
     // Triggered on every game loop round.
@@ -126,13 +140,18 @@ document.ready().then(() => {
                 // End game.
                 gameState = "gameOver";
                 clearInterval(tickRepeaterId);
+
+                paintEmptyGameCanvas(ctx, w, h);
+                paintTheSnake(snakeArray, ctx);
+                paintGameOver(ctx, w, h);
+            
             } else {
                 paintEmptyGameCanvas(ctx, w, h);
                 paintTheSnake(snakeArray, ctx);
             }
+
         }
 
     };
-
 
 });
