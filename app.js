@@ -10,15 +10,27 @@ document.ready().then(() => {
         const w = 450;
         const h = 450;
 
-        const snakeArray = createSnake();
+        const snakeArray = createTheSnake();
+        console.log(snakeArray);
 
-        const snakeSpeed = Math.round(1000 / 3); // 3 cells per second.
+        const snakeSpeed = Math.round(1000 / 5); // 3 cells per second.
         document.addEventListener("keydown", setDirection);
 
         setInterval(
             () => tick(snakeArray, ctx, w, h), 
             snakeSpeed
         );
+        
+        // DEBUG: Run tick on space keydown.
+        // document.addEventListener("keydown", 
+        //     (e) => {
+        //         console.log(e.which);
+
+        //         // space
+        //         if (e.which === 32) {
+        //             tick(snakeArray, ctx, w, h);
+        //         }
+        //     });
     }
 
     function setDirection(e) {
@@ -57,7 +69,7 @@ document.ready().then(() => {
     }
 
     // Create snake model
-    function createSnake() {
+    function createTheSnake() {
         // Array of snake cells.
         const snakeArray = [];
 
@@ -70,10 +82,21 @@ document.ready().then(() => {
     }
 
     function moveTheSnake(snakeArray, direction) {
-        console.log(direction);
-
         const head = snakeArray[snakeArray.length - 1];
-        const newHead = { x: head.x + 1, y: head.y };
+        let x = head.x;
+        let y = head.y;
+
+        if (direction === "up") {
+            y--;
+        } else if (direction === "right") {
+            x++;
+        } else if (direction === "down") {
+            y++;
+        } else if (direction === "left") {
+            x--;
+        }
+
+        const newHead = { x, y };
 
         // Add new head cell.
         snakeArray.push(newHead);
@@ -85,9 +108,10 @@ document.ready().then(() => {
 
     // Triggered on every game loop round.
     function tick(snakeArray, ctx, w, h) {
-        console.log(snakeArray);
-        
         snakeArray = moveTheSnake(snakeArray, direction);
+
+        console.log(direction);
+        console.log(snakeArray);
         
         paintEmptyGameCanvas(ctx, w, h);
         paintTheSnake(snakeArray, ctx);
