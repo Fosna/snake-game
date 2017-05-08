@@ -1,8 +1,10 @@
 document.ready().then(() => {
-    init();
-
     // Snake direction.
     let direction = "right";
+    let gameState = "start";
+    let tickRepeaterId = null;
+    
+    init();
 
     function init() {
         const canvas = document.getElementById("canvas");
@@ -11,24 +13,22 @@ document.ready().then(() => {
         const h = 450;
 
         const snakeArray = createTheSnake();
-        console.log(snakeArray);
 
         const snakeSpeed = Math.round(1000 / 5); // 3 cells per second.
         document.addEventListener("keydown", setDirection);
 
-        setInterval(
-            () => tick(snakeArray, ctx, w, h), 
+        console.log(gameState);
+        tickRepeaterId = setInterval(
+            () => tick(snakeArray, ctx, w, h, gameState), 
             snakeSpeed
         );
         
         // DEBUG: Run tick on space keydown.
         // document.addEventListener("keydown", 
         //     (e) => {
-        //         console.log(e.which);
-
         //         // space
         //         if (e.which === 32) {
-        //             tick(snakeArray, ctx, w, h);
+        //             tick(snakeArray, ctx, w, h, gameState);
         //         }
         //     });
     }
@@ -106,14 +106,33 @@ document.ready().then(() => {
         return snakeArray;
     }
 
-    // Triggered on every game loop round.
-    function tick(snakeArray, ctx, w, h) {
-        snakeArray = moveTheSnake(snakeArray, direction);
+    function isCrash(snakeArray, w, h) {
+        // Snake head touches walls.
+        const head = snakeArray[snakeArray.length - 1];
 
-        console.log(direction);
-        console.log(snakeArray);
-        
-        paintEmptyGameCanvas(ctx, w, h);
-        paintTheSnake(snakeArray, ctx);
+        isCrashDetected = head.x < 0 || w / 10 < head.x ||
+            head.y < 0 || h / 10 < head.y;
+        console.log(isCrashDetected);
+
+        return isCrashDetected;
+        // Snake head touches snake body.
+    }
+
+    // Triggered on every game loop round.
+    function tick(snakeArray, ctx, w, h, gameState) {
+        if (gameState.toLowerCase() !== "gameOver".toLowerCase()) {
+            snakeArray = moveTheSnake(snakeArray, direction);
+            if (isCrash(snakeArray, w, h)) {
+                // End game.
+                gameState = "gameOver";
+                clearInterval(tickRepeaterId);
+            } else {
+                paintEmptyGameCanvas(ctx, w, h);
+                paintTheSnake(snakeArray, ctx);
+            }
+        }
+
     };
+
+
 });
