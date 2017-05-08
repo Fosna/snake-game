@@ -29,19 +29,22 @@ document.ready().then(() => {
         //         if (e.which === 32) {
         //             tick(snakeArray, ctx, w, h, gameState);
         //         }
-        //     });
+        //     }
+        // );
     }
 
     function setDirection(e) {
         const key = e.which;
 
-        if (key === 37) {
+        console.log(e.which);
+
+        if (key === 37 && direction !== "right") {
             direction = "left";
-        } else if (key === 38) {
+        } else if (key === 38 && direction !== "down") {
             direction = "up";
-        } else if (key === 39) {
+        } else if (key === 39 && direction !== "left") {
             direction = "right";
-        } else if (key === 40) {
+        } else if (key === 40 && direction !== "up") {
             direction = "down";
         }
     }
