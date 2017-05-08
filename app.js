@@ -21,8 +21,18 @@ document.ready().then(() => {
         );
     }
 
-    function setDirection() {
-        direction = "right";
+    function setDirection(e) {
+        const key = e.which;
+
+        if (key === 37) {
+            direction = "left";
+        } else if (key === 38) {
+            direction = "up";
+        } else if (key === 39) {
+            direction = "right";
+        } else if (key === 40) {
+            direction = "down";
+        }
     }
 
     function paintEmptyGameCanvas(ctx, w, h) {
