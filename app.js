@@ -1,6 +1,8 @@
-document.ready().then(function () {
+document.ready().then(() => {
     init();
 
+    // Snake direction.
+    let direction = "right";
 
     function init() {
         const canvas = document.getElementById("canvas");
@@ -11,10 +13,16 @@ document.ready().then(function () {
         const snakeArray = createSnake();
 
         const snakeSpeed = Math.round(1000 / 3); // 3 cells per second.
+        document.addEventListener("keydown", setDirection);
+
         setInterval(
             () => tick(snakeArray, ctx, w, h), 
             snakeSpeed
         );
+    }
+
+    function setDirection() {
+        direction = "right";
     }
 
     function paintEmptyGameCanvas(ctx, w, h) {
@@ -51,7 +59,9 @@ document.ready().then(function () {
         return snakeArray;
     }
 
-    function moveTheSnake(snakeArray) {
+    function moveTheSnake(snakeArray, direction) {
+        console.log(direction);
+
         const head = snakeArray[snakeArray.length - 1];
         const newHead = { x: head.x + 1, y: head.y };
 
@@ -67,7 +77,7 @@ document.ready().then(function () {
     function tick(snakeArray, ctx, w, h) {
         console.log(snakeArray);
         
-        snakeArray = moveTheSnake(snakeArray);
+        snakeArray = moveTheSnake(snakeArray, direction);
         
         paintEmptyGameCanvas(ctx, w, h);
         paintTheSnake(snakeArray, ctx);
