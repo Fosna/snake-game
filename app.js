@@ -6,29 +6,36 @@ document
         let directionInput = direction;
         let gameState = "start";
         let tickRepeaterId = null;
+        let extendTheSnake = false;
 
         init();
 
         function init() {
             const canvas = document.getElementById("canvas");
             const ctx = canvas.getContext("2d");
-            const w = 50;
-            const h = 50;
+            const w = 200;
+            const h = 300;
 
-            const snakeArray = createTheSnake();
+            const middleX = Math.floor(w / 10 / 2);
+            const middleY = Math.floor(h / 10 / 2);
+            const snakeArray = createTheSnake(2, middleX, middleY);
             const food = createFood(w, h, snakeArray, {});
 
-            const snakeSpeed = Math.round(1000 / 5); // 3 cells per second.
+            const snakeSpeed = Math.round(1000 / 8); // 3 cells per second.
             document.addEventListener("keydown", setDirectionInput);
 
-            // tickRepeaterId = setInterval(     () => tick(snakeArray, ctx, w, h,
-            // gameState),     snakeSpeed ); DEBUG: Run tick on space keydown.
-            document.addEventListener("keydown", (e) => {
-                // space
-                if (e.which === 32) {
-                    tick(snakeArray, food, ctx, w, h, gameState);
-                }
-            });
+            tickRepeaterId = setInterval(
+                () => tick(snakeArray, food, ctx, w, h, gameState),
+                snakeSpeed 
+            ); 
+
+            // DEBUG: Run tick on space keydown.
+            // document.addEventListener("keydown", (e) => {
+            //     // space
+            //     if (e.which === 32) {
+            //         tick(snakeArray, food, ctx, w, h, gameState);
+            //     }
+            // });
         }
 
         function createFood(w, h, snakeArray, food) {
@@ -88,19 +95,18 @@ document
         }
 
         // Create snake model
-        function createTheSnake() {
+        function createTheSnake(snakeLength, middleX, middleY) {
             // Array of snake cells.
             const snakeArray = [];
 
-            const snakeLength = 2;
             for (let i = 0; i < snakeLength; i++) {
-                snakeArray.push({x: i, y: 0});
+                snakeArray.push({x: middleX + i, y: middleY});
             }
 
             return snakeArray;
         }
 
-        function moveTheSnake(snakeArray) {
+        function moveTheSnake(snakeArray, extendTheSnake) {
             const head = snakeArray[snakeArray.length - 1];
             let x = head.x;
             let y = head.y;
@@ -134,8 +140,12 @@ document
 
             // Add new head cell.
             snakeArray.push(newHead);
-            // Remove last tail cell.
-            snakeArray.shift(0);
+            
+            // If snake should be extended tail cell won't be removed.
+            if (extendTheSnake === false) {
+                // Remove last tail cell.
+                snakeArray.shift(0);
+            }
 
             return snakeArray;
         }
@@ -158,7 +168,7 @@ document
         }
 
         function paintGameOver(ctx, w, h) {
-            ctx.font = "48px arial";
+            ctx.font = "24px arial";
             ctx.textAlign = "center"
             ctx.fillStyle = "black";
             ctx.fillText("Game Over", Math.round(w / 2), Math.round(h / 2));
@@ -181,7 +191,8 @@ document
         // Triggered on every game loop round.
         function tick(snakeArray, food, ctx, w, h, gameState) {
             if (gameState.toLowerCase() !== "gameOver".toLowerCase()) {
-                snakeArray = moveTheSnake(snakeArray, direction);
+                snakeArray = moveTheSnake(snakeArray, extendTheSnake, direction);
+                extendTheSnake = false;
                 if (isSnakeCrash(snakeArray, w, h)) {
                     // End game.
                     gameState = "gameOver";
@@ -194,6 +205,9 @@ document
                 } else {
                     if (isFoodSnakeCollision(snakeArray, food)) {
                         food = createFood(w, h, snakeArray, food);
+                        // Snake will be extended on next paint.
+                        // It's not possible to extend it right now because tail cell direction is unknown.
+                        extendTheSnake = true;
                     }
                     paintEmptyGameCanvas(ctx, w, h);
                     paintTheSnake(snakeArray, ctx);
