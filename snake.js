@@ -3,6 +3,7 @@ class SnakeGame {
         this.graphics = new Graphics("canvas");
 
         this.snake = new SnakeModel(2);
+        this.wallCollider = new WallCollider(this.graphics.w, this.graphics.h, this.graphics.cellWidth);
 
         this.userControlls = new UserControlls();
     }
@@ -17,6 +18,10 @@ class SnakeGame {
         this
             .snake
             .move(this.userControlls.direction);
+
+        if (this.wallCollider.isCollision(this.snake)) {
+            console.log("game over");
+        }
 
         this
             .graphics
@@ -34,6 +39,8 @@ class Graphics {
         this.ctx = canvas.getContext("2d");
         this.w = canvas.width;
         this.h = canvas.height;
+
+        this.cellWidth = 10;
     }
 
     paintEmptyCanvas() {
@@ -52,7 +59,7 @@ class Graphics {
             this.ctx.fillStyle = "blue";
             this
                 .ctx
-                .fillRect(cell.x * 10, cell.y * 10, 9, 9);
+                .fillRect(cell.x * this.cellWidth, cell.y * this.cellWidth, this.cellWidth - 1, this.cellWidth - 1);
         }
     }
 }
@@ -116,4 +123,20 @@ const KeyToDirection = {
     38: "up",
     39: "right",
     40: "down"
+}
+
+class WallCollider {
+    constructor(w, h, cellWidth) {
+        this.w = w;
+        this.h = h;
+        this.cellWidth = cellWidth;
+    }
+
+    isCollision(snake) {
+        const head = snake.snakeArray[snake.snakeArray.length - 1];
+
+        const isCollisionDetected = head.x < 0 || this.w / this.cellWidth <= head.x || head.y < 0 || this.h / this.cellWidth <= head.y;
+
+        return isCollisionDetected;
+    }
 }
