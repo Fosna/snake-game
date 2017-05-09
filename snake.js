@@ -3,6 +3,11 @@ class SnakeGame {
         this.graphics = new Graphics("canvas");
 
         this.snake = new SnakeModel(2);
+        
+        const maxCellX = Math.floor(this.graphics.w / this.graphics.cellWidth);
+        const maxCellY = Math.floor(this.graphics.h / this.graphics.cellWidth);
+        this.food = new FoodModel(this.snake, maxCellX, maxCellY);
+
         this.wallCollider = new WallCollider(this.graphics.w, this.graphics.h, this.graphics.cellWidth);
 
         this.userControlls = new UserControlls();
@@ -22,7 +27,6 @@ class SnakeGame {
     }
 
     tick() {
-
         this
             .snake
             .move(this.userControlls.direction);
@@ -40,6 +44,9 @@ class SnakeGame {
             this
                 .graphics
                 .paintSnake(this.snake);
+            this
+                .graphics
+                .paintFood(this.food);
         }
 
     }
@@ -86,6 +93,13 @@ class Graphics {
             .ctx
             .fillText("Game Over", Math.round(this.w / 2), Math.round(this.h / 2));
     }
+
+    paintFood(food) {
+        this.ctx.fillStyle = "blue";
+            this
+                .ctx
+                .fillRect(food.position.x * this.cellWidth, food.position   .y * this.cellWidth, this.cellWidth - 1, this.cellWidth - 1);
+    }
 }
 
 class SnakeModel {
@@ -125,6 +139,31 @@ class SnakeModel {
         this
             .snakeArray
             .shift(0);
+    }
+}
+
+class FoodModel {
+    constructor(snake, maxCellX, maxCellY) {
+        this.snake = snake;
+        this.maxCellX = maxCellX;
+        this.maxCellY = maxCellY;
+        
+        this.position = { x: 0, y: 0 };
+
+        this.reposition();
+    }
+
+    reposition() {
+        this.position = {
+            x: this.getRandomInt(0, this.maxCellX),
+            y: this.getRandomInt(0, this.maxCellY)
+        }
+    }
+
+    getRandomInt(min, max) {
+        min = Math.ceil(min);
+        max = Math.floor(max);
+        return Math.floor(Math.random() * (max - min)) + min;
     }
 }
 
