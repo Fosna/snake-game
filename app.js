@@ -13,8 +13,8 @@ document
         function init() {
             const canvas = document.getElementById("canvas");
             const ctx = canvas.getContext("2d");
-            const w = 200;
-            const h = 300;
+            const w = canvas.width;
+            const h = canvas.height;
 
             const middleX = Math.floor(w / 10 / 2);
             const middleY = Math.floor(h / 10 / 2);
