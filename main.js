@@ -1,1 +1,6 @@
-document.ready().then(() => new SnakeGame());
+document
+    .ready()
+    .then(() => {
+        var game = new SnakeGame();
+        game.start();
+    });

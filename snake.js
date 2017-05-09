@@ -9,6 +9,16 @@ class SnakeGame {
 
         console.log("ant");
     }
+
+    start() {
+        document.addEventListener("keydown", e => {
+            this.tick();
+        });
+    }
+
+    tick() {
+        console.log("monkey");
+    }
 }
 
 class Graphics {
