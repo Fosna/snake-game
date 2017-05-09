@@ -12,6 +12,8 @@ class SnakeGame {
     }
 
     tick() {
+        this.snake.move();
+
         this.graphics.paintEmptyCanvas();
         this.graphics.paintSnake(this.snake);
     }
@@ -47,5 +49,15 @@ class SnakeModel {
         for(let i = 0; i < length; i++) {
             this.snakeArray.push({x: i, y: 0});
         }
+    }
+
+    move() {
+        const head = this.snakeArray[this.snakeArray.length - 1];
+        const newHead = { x: head.x + 1, y: head.y };
+
+        // Add new head.
+        this.snakeArray.push(newHead);
+        // Remove tail.
+        this.snakeArray.shift(0);
     }
 }
