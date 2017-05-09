@@ -42,6 +42,7 @@ class SnakeGame {
 
 
         if (this.wallCollider.isCollision(this.snake)) {
+            // TODO: Snake body colider.
             clearInterval(this.tickIntervalId);
 
             this
@@ -129,6 +130,7 @@ class SnakeModel {
 
         let x = head.x;
         let y = head.y;
+        // TODO: Supress reverse gear.
         if (direction === "up") {
             y--;
         } else if (direction === "right") {
