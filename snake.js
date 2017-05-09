@@ -120,6 +120,8 @@ class SnakeModel {
                 .snakeArray
                 .push({x: i, y: 0});
         }
+
+        this.grow = false;
     }
 
     move(direction) {
@@ -145,14 +147,22 @@ class SnakeModel {
         this
             .snakeArray
             .push(newHead);
+        
         // Remove tail.
-        this
-            .snakeArray
-            .shift(0);
+        // Don't remove tail if snake has just ate.
+        if (this.grow === false) {
+            this
+                .snakeArray
+                .shift(0);
+        } 
+
+        // Reset extend
+        this.grow = false;
     }
 
+    // Tail will grow when snake moves.
     extend() {
-        console.log("extend snake");
+        this.grow = true;
     }
 }
 
