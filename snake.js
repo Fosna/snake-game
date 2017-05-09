@@ -18,16 +18,18 @@ class SnakeGame {
 
     start() {
         // DEBUG:
-        document.addEventListener("keydown", e => {
-            this.tick();
-        });
+        // document.addEventListener("keydown", e => {
+        //     this.tick();
+        // });
 
-        // const cellsPerSecond = 5; const snakeSpeed = Math.floor(1000 /
-        // cellsPerSecond); this.tickIntervalId = setInterval(() => this.tick(),
-        // snakeSpeed); console.log(this.tickIntervalId);
+        const cellsPerSecond = 5; 
+        const snakeSpeed = Math.floor(1000 / cellsPerSecond); 
+        this.tickIntervalId = setInterval(() => this.tick(), snakeSpeed); 
     }
 
     tick() {
+        // TODO: Restart game.
+
         this
             .snake
             .move(this.userControlls.direction);
