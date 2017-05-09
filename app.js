@@ -53,11 +53,7 @@ document
             return food;
         }
 
-        function getRandomInt(min, max) {
-            min = Math.ceil(min);
-            max = Math.floor(max);
-            return Math.floor(Math.random() * (max - min)) + min;
-        }
+        function 
 
         function setDirectionInput(e) {
             const key = e.which;
