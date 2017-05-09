@@ -6,21 +6,38 @@ class SnakeGame {
         this.wallCollider = new WallCollider(this.graphics.w, this.graphics.h, this.graphics.cellWidth);
 
         this.userControlls = new UserControlls();
+
+        this.tickIntervalId = null;
+
+        this.frame = 0;
     }
 
     start() {
-        document.addEventListener("keydown", e => {
-            this.tick();
-        });
+        // DEBUG:
+        // document.addEventListener("keydown", e => {
+        //     this.tick();
+        // });
+
+        const cellsPerSecond = 5;
+        const snakeSpeed = Math.floor(1000 / cellsPerSecond); 
+        
+        this.tickIntervalId = setInterval(() => this.tick(), snakeSpeed);
+        console.log(this.tickIntervalId);
     }
 
     tick() {
+        this.frame++;
+        // console.log(this.frame);
+
         this
             .snake
             .move(this.userControlls.direction);
 
         if (this.wallCollider.isCollision(this.snake)) {
             console.log("game over");
+            clearInterval(this.tickIntervalId);
+
+            // TODO: Paint game over.
         }
 
         this
