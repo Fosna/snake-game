@@ -4,13 +4,6 @@ class SnakeGame {
 
         this.snake = new SnakeModel(2);
 
-        this
-            .graphics
-            .paintEmptyCanvas();
-        this
-            .graphics
-            .paintSnake(this.snake);
-
     }
 
     start() {
@@ -20,7 +13,12 @@ class SnakeGame {
     }
 
     tick() {
-        console.log("monkey");
+        this
+            .graphics
+            .paintEmptyCanvas();
+        this
+            .graphics
+            .paintSnake(this.snake);
     }
 }
 
