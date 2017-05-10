@@ -26,6 +26,9 @@ class SnakeGame {
     }
 
     tick() {
+        // TODO: Keep score.
+        // TODO: Restart game.
+
         this
             .snake
             .move(this.userControlls.direction);
@@ -33,6 +36,7 @@ class SnakeGame {
         if (this.wallCollider.isCollision(this.snake)) {
             clearInterval(this.tickIntervalId);
 
+            // TODO: Snake body colider.
             this
                 .graphics
                 .paintGameOver();
@@ -125,6 +129,7 @@ class SnakeModel {
 
         let x = head.x;
         let y = head.y;
+        // TODO: Supress reverse gear.
         if (direction === "up") {
             y--;
         } else if (direction === "right") {
@@ -143,19 +148,18 @@ class SnakeModel {
         this
             .snakeArray
             .push(newHead);
-        // Remove tail.
-        // Don't remove tail if snake has just ate.
+        // Remove tail. Don't remove tail if snake has just ate.
         if (this.grow === false) {
             this
                 .snakeArray
                 .shift(0);
-        } 
+        }
         // Reset extend
         this.grow = false;
     }
 
-    // Tail doesn't grow immediately. We don't know direction of the tail to extend it. 
-    // It'll grow on next snake movement.
+    // Tail doesn't grow immediately. We don't know direction of the tail to extend
+    // it. It'll grow on next snake movement.
     extend() {
         this.grow = true;
     }
@@ -173,12 +177,16 @@ class FoodModel {
         };
         this.reposition();
     }
+
     reposition() {
+        // TODO: Preventing repositioning food on current snake location.
+
         this.position = {
             x: this.getRandomInt(0, this.maxCellX),
             y: this.getRandomInt(0, this.maxCellY)
         }
     }
+
     getRandomInt(min, max) {
         min = Math.ceil(min);
         max = Math.floor(max);
