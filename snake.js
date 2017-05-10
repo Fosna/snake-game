@@ -12,6 +12,16 @@ class SnakeGame {
             .paintSnake(this.snake);
 
     }
+
+    start() {
+        document.addEventListener("keydown", e => {
+            this.tick();
+        });
+    }
+
+    tick() {
+        console.log("monkey");
+    }
 }
 
 class Graphics {
