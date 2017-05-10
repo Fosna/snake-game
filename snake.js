@@ -2,9 +2,14 @@ class SnakeGame {
     constructor() {
         this.graphics = new Graphics("canvas");
 
+        this.snake = new SnakeModel(2);
+
         this
             .graphics
             .paintEmptyCanvas();
+        this
+            .graphics
+            .paintSnake(this.snake);
 
     }
 }
@@ -27,5 +32,25 @@ class Graphics {
         this
             .ctx
             .strokeRect(0, 0, this.w, this.h);
+    }
+
+    paintSnake(snake) {
+        for (let cell of snake.snakeArray) {
+            this.ctx.fillStyle = "blue";
+            this
+                .ctx
+                .fillRect(cell.x * 10, cell.y * 10, 9, 9);
+        }
+    }
+}
+
+class SnakeModel {
+    constructor(length) {
+        this.snakeArray = [];
+        for (let i = 0; i < length; i++) {
+            this
+                .snakeArray
+                .push({x: i, y: 0});
+        }
     }
 }
