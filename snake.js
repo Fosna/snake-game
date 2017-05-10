@@ -3,7 +3,7 @@ class SnakeGame {
         this.graphics = new Graphics("canvas");
 
         this.snake = new SnakeModel(2);
-        
+
         const maxCellX = Math.floor(this.graphics.w / this.graphics.cellWidth);
         const maxCellY = Math.floor(this.graphics.h / this.graphics.cellWidth);
         this.food = new FoodModel(this.snake, maxCellX, maxCellY);
@@ -17,14 +17,11 @@ class SnakeGame {
     }
 
     start() {
-        // DEBUG:
-        // document.addEventListener("keydown", e => {
-        //     this.tick();
-        // });
+        // DEBUG: document.addEventListener("keydown", e => {     this.tick(); });
 
-        const cellsPerSecond = 5; 
-        const snakeSpeed = Math.floor(1000 / cellsPerSecond); 
-        this.tickIntervalId = setInterval(() => this.tick(), snakeSpeed); 
+        const cellsPerSecond = 5;
+        const snakeSpeed = Math.floor(1000 / cellsPerSecond);
+        this.tickIntervalId = setInterval(() => this.tick(), snakeSpeed);
     }
 
     tick() {
@@ -41,7 +38,6 @@ class SnakeGame {
                 .food
                 .reposition();
         }
-
 
         if (this.wallCollider.isCollision(this.snake)) {
             // TODO: Snake body colider.
@@ -95,7 +91,7 @@ class Graphics {
                 .fillRect(cell.x * this.cellWidth, cell.y * this.cellWidth, this.cellWidth - 1, this.cellWidth - 1);
         }
     }
-  
+
     paintGameOver() {
         console.log("game over");
 
@@ -109,9 +105,9 @@ class Graphics {
 
     paintFood(food) {
         this.ctx.fillStyle = "blue";
-            this
-                .ctx
-                .fillRect(food.position.x * this.cellWidth, food.position   .y * this.cellWidth, this.cellWidth - 1, this.cellWidth - 1);
+        this
+            .ctx
+            .fillRect(food.position.x * this.cellWidth, food.position.y * this.cellWidth, this.cellWidth - 1, this.cellWidth - 1);
     }
 }
 
@@ -151,14 +147,13 @@ class SnakeModel {
         this
             .snakeArray
             .push(newHead);
-        
-        // Remove tail.
-        // Don't remove tail if snake has just ate.
+
+        // Remove tail. Don't remove tail if snake has just ate.
         if (this.grow === false) {
             this
                 .snakeArray
                 .shift(0);
-        } 
+        }
 
         // Reset extend
         this.grow = false;
@@ -175,8 +170,11 @@ class FoodModel {
         this.snake = snake;
         this.maxCellX = maxCellX;
         this.maxCellY = maxCellY;
-        
-        this.position = { x: 0, y: 0 };
+
+        this.position = {
+            x: 0,
+            y: 0
+        };
 
         this.reposition();
     }
@@ -236,9 +234,8 @@ class FoodCollider {
     isCollision(snake, food) {
         const head = snake.snakeArray[snake.snakeArray.length - 1];
 
-        const isCollisionDetected = head.x === food.position.x &&
-            head.y === food.position.y;
-        
+        const isCollisionDetected = head.x === food.position.x && head.y === food.position.y;
+
         return isCollisionDetected;
     }
 }
