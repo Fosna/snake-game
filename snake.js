@@ -7,12 +7,17 @@ class SnakeGame {
         this.wallCollider = new WallCollider(this.graphics.w, this.graphics.h, this.graphics.cellWidth);
 
         this.userControlls = new UserControlls();
+
+        this.tickIntervalId = null;
     }
 
     start() {
-        document.addEventListener("keydown", e => {
-            this.tick();
-        });
+        // // DEBUG document.addEventListener("keydown", e => {     this.tick(); });
+
+        const cellsPerSecond = 5;
+        const snakeSpeed = Math.floor(1000 / cellsPerSecond);
+
+        this.tickIntervalId = setInterval(() => this.tick(), snakeSpeed);
     }
 
     tick() {
@@ -22,14 +27,17 @@ class SnakeGame {
 
         if (this.wallCollider.isCollision(this.snake)) {
             console.log("game over");
+
+            clearInterval(this.tickIntervalId);
+        } else {
+            this
+                .graphics
+                .paintEmptyCanvas();
+            this
+                .graphics
+                .paintSnake(this.snake);
         }
 
-        this
-            .graphics
-            .paintEmptyCanvas();
-        this
-            .graphics
-            .paintSnake(this.snake);
     }
 }
 
@@ -110,7 +118,7 @@ class UserControlls {
         this.direction = "right";
         document.addEventListener("keydown", e => this.setDirection(e));
     }
-    
+
     setDirection(e) {
         const newDirection = KeyToDirection[e.which];
         if (newDirection) {
