@@ -18,7 +18,7 @@ class SnakeGame {
 
         this
             .snake
-            .move();
+            .move(this.userControlls.direction);
 
         this
             .graphics
@@ -69,14 +69,33 @@ class SnakeModel {
         }
     }
 
-    move() {
+    move(direction) {
         const head = this.snakeArray[this.snakeArray.length - 1];
-        const newHead = { x: head.x + 1, y: head.y };
+
+        let x = head.x;
+        let y = head.y;
+        if (direction === "up") {
+            y--;
+        } else if (direction === "right") {
+            x++;
+        } else if (direction === "down") {
+            y++;
+        } else if (direction === "left") {
+            x--;
+        }
+        const newHead = {
+            x,
+            y
+        };
 
         // Add new head.
-        this.snakeArray.push(newHead);
+        this
+            .snakeArray
+            .push(newHead);
         // Remove tail.
-        this.snakeArray.shift(0);
+        this
+            .snakeArray
+            .shift(0);
     }
 }
 
