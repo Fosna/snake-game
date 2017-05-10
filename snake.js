@@ -26,9 +26,11 @@ class SnakeGame {
             .move(this.userControlls.direction);
 
         if (this.wallCollider.isCollision(this.snake)) {
-            console.log("game over");
-
             clearInterval(this.tickIntervalId);
+
+            this
+                .graphics
+                .paintGameOver();
         } else {
             this
                 .graphics
@@ -70,6 +72,15 @@ class Graphics {
                 .ctx
                 .fillRect(cell.x * this.cellWidth, cell.y * this.cellWidth, this.cellWidth - 1, this.cellWidth - 1);
         }
+    }
+
+    paintGameOver() {
+        this.ctx.font = "24px arial";
+        this.ctx.textAlign = "center"
+        this.ctx.fillStyle = "black";
+        this
+            .ctx
+            .fillText("Game Over", Math.round(this.w / 2), Math.round(this.h / 2));
     }
 }
 
