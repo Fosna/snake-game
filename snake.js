@@ -4,6 +4,7 @@ class SnakeGame {
 
         this.snake = new SnakeModel(2);
 
+        this.userControlls = new UserControlls();
     }
 
     start() {
@@ -13,6 +14,8 @@ class SnakeGame {
     }
 
     tick() {
+        console.log(this.userControlls.direction);
+
         this
             .snake
             .move();
@@ -69,10 +72,30 @@ class SnakeModel {
     move() {
         const head = this.snakeArray[this.snakeArray.length - 1];
         const newHead = { x: head.x + 1, y: head.y };
-        
+
         // Add new head.
         this.snakeArray.push(newHead);
         // Remove tail.
         this.snakeArray.shift(0);
     }
+}
+
+class UserControlls {
+    constructor() {
+        this.direction = "right";
+        document.addEventListener("keydown", e => this.setDirection(e));
+    }
+    setDirection(e) {
+        const newDirection = KeyToDirection[e.which];
+        if (newDirection) {
+            this.direction = newDirection;
+        }
+    }
+}
+
+const KeyToDirection = {
+    37: "left",
+    38: "up",
+    39: "right",
+    40: "down"
 }
