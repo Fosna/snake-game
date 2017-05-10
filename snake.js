@@ -9,6 +9,7 @@ class SnakeGame {
         this.food = new FoodModel(this.snake, maxCellX, maxCellY);
 
         this.wallCollider = new WallCollider(this.graphics.w, this.graphics.h, this.graphics.cellWidth);
+        this.foodCollider = new FoodCollider();
 
         this.userControlls = new UserControlls();
 
@@ -36,6 +37,15 @@ class SnakeGame {
                 .graphics
                 .paintGameOver();
         } else {
+            if (this.foodCollider.isCollision(this.snake, this.food)) {
+                this
+                    .snake
+                    .extend();
+                this
+                    .food
+                    .reposition();
+            }
+
             this
                 .graphics
                 .paintEmptyCanvas();
@@ -106,6 +116,7 @@ class SnakeModel {
                 .snakeArray
                 .push({x: i, y: 0});
         }
+
     }
 
     move(direction) {
@@ -135,6 +146,10 @@ class SnakeModel {
         this
             .snakeArray
             .shift(0);
+    }
+
+    extend() {
+        console.log("extend snake");
     }
 }
 
@@ -194,6 +209,15 @@ class WallCollider {
     isCollision(snake) {
         const head = snake.snakeArray[snake.snakeArray.length - 1];
         const isCollisionDetected = head.x < 0 || this.w / this.cellWidth <= head.x || head.y < 0 || this.h / this.cellWidth <= head.y;
+        return isCollisionDetected;
+    }
+}
+
+class FoodCollider {
+    isCollision(snake, food) {
+        const head = snake.snakeArray[snake.snakeArray.length - 1];
+        const isCollisionDetected = head.x === food.position.x && head.y === food.position.y;
+
         return isCollisionDetected;
     }
 }
