@@ -2,22 +2,29 @@ class SnakeGame {
     constructor() {
         this.graphics = new Graphics("canvas");
 
+        // Game model objects
         this.snake = new SnakeModel(2);
 
         const maxCellX = Math.floor(this.graphics.w / this.graphics.cellWidth);
         const maxCellY = Math.floor(this.graphics.h / this.graphics.cellWidth);
         this.food = new FoodModel(this.snake, maxCellX, maxCellY);
 
+        // Collision detection objects.
         this.wallCollider = new WallCollider(this.graphics.w, this.graphics.h, this.graphics.cellWidth);
         this.foodCollider = new FoodCollider();
 
+        // User interaction object.
         this.userControlls = new UserControlls();
 
+        // Used to stop game loop.
         this.tickIntervalId = null;
     }
 
     start() {
-        // // DEBUG document.addEventListener("keydown", e => {     this.tick(); });
+        // 
+        // DEBUG: Uncomment to move to the next tick by pressing any key.
+        // Comment out rest of this method.
+        // document.addEventListener("keydown", e => {     this.tick(); });
 
         const cellsPerSecond = 5;
         const snakeSpeed = Math.floor(1000 / cellsPerSecond);
@@ -25,14 +32,17 @@ class SnakeGame {
         this.tickIntervalId = setInterval(() => this.tick(), snakeSpeed);
     }
 
+    // Game loop.
     tick() {
         // TODO: Keep score.
         // TODO: Restart game.
 
+        // Update snake game model.
         this
             .snake
             .move(this.userControlls.direction);
 
+        // Check end game condition.
         if (this.wallCollider.isCollision(this.snake)) {
             clearInterval(this.tickIntervalId);
 
@@ -41,6 +51,7 @@ class SnakeGame {
                 .graphics
                 .paintGameOver();
         } else {
+            // Update game logic if food is eaten.
             if (this.foodCollider.isCollision(this.snake, this.food)) {
                 this
                     .snake
@@ -50,6 +61,7 @@ class SnakeGame {
                     .reposition();
             }
 
+            // Paint game model changes on canvas.
             this
                 .graphics
                 .paintEmptyCanvas();
@@ -64,6 +76,7 @@ class SnakeGame {
     }
 }
 
+// Responsible for drawing everything on canvas.
 class Graphics {
     constructor(canvasId) {
         const canvas = document.getElementById(canvasId);
@@ -72,6 +85,7 @@ class Graphics {
         this.w = canvas.width;
         this.h = canvas.height;
 
+        // Snake cell width.
         this.cellWidth = 10;
     }
 
@@ -121,6 +135,7 @@ class SnakeModel {
                 .push({x: i, y: 0});
         }
 
+        // True means that snake tail should be extended.
         this.grow = false;
     }
 
