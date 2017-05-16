@@ -9,4 +9,5 @@ This project uses ES6 (ES2015) JavaScript features natively (no transpilation). 
 
 
 Inspired by: [HTML5 game tutorial - Make a snake game using HTML5 canvas and Jquery](http://thecodeplayer.com/walkthrough/html5-game-tutorial-make-a-snake-game-using-html5-canvas-jquery)
+
 Kudos
